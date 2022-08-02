@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-700">
 <div class="bg-gray-800 h-[3rem] text-white">
     <nav class="flex justify-between md:mx-[20rem] h-full items-center center">
         <h1 class="text-xl">RentMyTool</h1>
-        <div class="flex space-x-10">
+        <div class="flex md:space-x-10 space-x-2">
             <a href="{% url 'home' %}"><h1>Home</h1></a>
             {% if user.is_authenticated %}
-            <h1  >{{ user.username }}</h1>
+                <h1>Welcome, {{ user.username }}</h1>
+                <h1><a href="/logout">logout</a></h1>
+            {% else %}
+                <h1><a href="/login">Login</a></h1>
             {% endif %}
         </div>
     </nav>

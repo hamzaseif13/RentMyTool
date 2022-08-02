@@ -4,7 +4,6 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    age = models.IntegerField(null=True)
     def __str__(self):
         return self.username
 
@@ -20,7 +19,9 @@ class Tool(models.Model):
     status = models.CharField(choices=current_status, default="A", max_length=1)
     added_at = models.DateTimeField(auto_now_add=True)
     last_rental = models.DateTimeField(null=True, blank=True)
-
+    description = models.CharField(max_length=500,blank=True,null=True)
+    image_url = models.URLField(blank=True,null=True)
+    price = models.IntegerField()
     def __str__(self):
         return self.name
 

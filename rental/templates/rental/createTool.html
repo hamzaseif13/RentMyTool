@@ -1,8 +1,42 @@
 {% extends 'rental/base.html' %}
 {% block content %}
-    <form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit"></button>
+         <h1 class="text-center text-3xl my-10 text-white">Create new tool</h1>
+
+    <form method="post" class="border rounded p-2   md:m-auto m-auto max-w-[600px] ">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="{{ form.name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                Tool name :</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        <div class="mb-4">
+            <label for="{{ form.price.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                Tool Price, Jd per day :</label>
+            {{ form.price }}
+            {{ form.price.errors }}
+        </div>
+        <div class="mb-4">
+            <label for="{{ form.status.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                Tool Status :</label>
+            {{ form.status }}
+            {{ form.status.errors }}
+        </div>
+        <div class="mb-4">
+            <label for="{{ form.description.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                Tool description :</label>
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+        <div class="mb-4">
+            <label for="{{ form.image_url.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                Image url :</label>
+            {{ form.image_url }}
+            {{ form.image_url.errors }}
+        </div>
+        <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+            Add
+        </button>
     </form>
 {% endblock %}
