@@ -1,0 +1,53 @@
+{% extends 'rental/base.html' %}
+
+{% block content %}
+    <div>
+        <div class="flex justify-center">
+            <div class="text-white flex flex-col md:flex-row justify-center  mx-2 mt-5">
+                <img alt='tool picture' src="{{ tool.image_url }}"
+                     class="w-[25rem] h-[25rem] rounded object-cover shadow-md">
+                <div class="max-w-[25rem] md:ml-5">
+                    <div class="">
+                        <h1 class="text-3xl font-bold my-1">{{ tool.name }}</h1>
+                        <h2 class="mb-3">By <a href="{% url 'profile' tool.owner.username %}"
+                                               class="text-blue-500 ">{{ tool.owner.full_name }}</a></h2>
+                        <h1 class="mb-3"><span
+                                class="bg-white text-black p-2 rounded my-4 text-xl font-bold"
+                                id="price">${{ tool.price }}</span>
+                            per day
+                        </h1>
+                        <p class="text-gray-300">{{ tool.description }}</p>
+                        {% if tool.is_available %}
+                            {% if user.is_authenticated and user != tool.owner %}
+                                <form method="post" class="text-black mt-3">
+                                    {% csrf_token %}
+                                    <label class='text-white ' for="{{ form.rental_days.id_for_label }}">Rental
+                                        days</label>
+                                    {{ form.rental_days }}
+                                    <h1 class="text-white">Total : <span id="totalprice"
+                                                                         class="text-blue-500 text-lg">{{ tool.price }}</span>$
+                                    </h1>
+                                    <button type="submit"
+                                            class="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4
+                        focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm
+                        px-5 py-2.5 text-center ">
+                                        Rent
+                                    </button>
+                                </form>
+                            {% else %}
+                                <div class="mt-5">
+                                    <a href="{% url 'login' %}?next=/tool/{{ tool.id }} " class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4
+                        focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm
+                        px-5 py-2.5 text-center mt-20 ">Log in to Rent</a>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <h1 class="text-red-600 mt-5">Item is currently not available</h1>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

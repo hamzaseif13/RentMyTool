@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,16 +8,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'rental/css/style.css' %}">
+    <script src="{% static 'rental/js/script.js' %}" defer></script>
+    <script src="https://unpkg.com/flowbite@1.5.1/dist/flowbite.js" defer></script>
+
 </head>
-<body class="bg-gray-700">
-<div class="bg-gray-800 h-[3rem] text-white">
-    <nav class="flex justify-between md:mx-[20rem] h-full items-center center">
-        <h1 class="text-xl">RentMyTool</h1>
-        <div class="flex md:space-x-10 space-x-2">
-            <a href="{% url 'home' %}"><h1>Home</h1></a>
+<body class="bg-gray-800">
+<div class="bg-gray-900 h-[4rem] text-white">
+    <nav class="flex justify-between mx-4 lg:mx-[15rem] md:mx-[5rem] sm:mx-[5rem] h-full items-center center">
+        <a href="{% url 'home' %}" class="text-xl"><h1>RentMyTool</h1></a>
+        <div class="flex md:space-x-5 space-x-2 items-center">
+
+
             {% if user.is_authenticated %}
-                <h1>Welcome, {{ user.username }}</h1>
-                <h1><a href="/logout">logout</a></h1>
+                <a href="{% url 'create_tool' %}"
+                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Add
+                    tool</a>
+                <div class="flex space-x-2 items-center">
+
+                    <div>
+                        <button id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                                data-dropdown-placement="bottom-start"
+                                class="font-medium text-gray-300 hover:bg-gray-700 inline-flex overflow-hidden relative justify-center items-center w-10 h-10  rounded-full bg-gray-600">
+                            {{ user.first_name|slice:"1" }}{{ user.last_name|slice:"1" }}</button>
+                        <!-- Dropdown menu -->
+                        <div id="userDropdown"
+                             class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 block"
+                             data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom-start"
+                             style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(20px, 70px);">
+                            <div class="py-3 px-4 text-sm text-gray-900 dark:text-white">
+                                <div>{{ user.full_name }}</div>
+                                <div class="font-medium truncate">{{ user.email }}</div>
+                            </div>
+                            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                                <li>
+                                    <a href="{% url 'profile' user.username %}"
+                                       class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                       class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                                </li>
+                            </ul>
+                            <div class="py-1">
+                                <a href="{% url 'logout' %}"
+                                   class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
+                                    out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% else %}
                 <h1><a href="/login">Login</a></h1>
             {% endif %}

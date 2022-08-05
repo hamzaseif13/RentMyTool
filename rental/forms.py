@@ -2,7 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from .models import CustomUser, Tool
+from .models import CustomUser, Tool, RentalDetails
 
 inputClass = "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
 
@@ -75,3 +75,10 @@ class CustomLoginForm(AuthenticationForm):
             {
                 'class': "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "}
         )
+
+
+class RentForm(forms.Form):
+    rental_days = forms.IntegerField(max_value=14,min_value=1,widget=forms.NumberInput(attrs={'class':'rounded py-2 text-center font-bold ml-2','value':1}))
+
+
+

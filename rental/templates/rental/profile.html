@@ -1,0 +1,107 @@
+{% extends 'rental/base.html' %}
+
+{% block content %}
+    <div class="mx-4 lg:mx-[15rem] md:mx-[5rem] sm:mx-[5rem] mt-10 text-white">
+        <h1 class=" text-3xl">{{ profile_user.full_name }}</h1>
+        <h2 class="text-2xl mt-5 mb-2">Tools :</h2>
+
+
+        <div class="overflow-x-auto relative shadow-md rounded-lg ">
+            <table class="w-full text-sm text-left  text-gray-400 ">
+                <thead class="text-xs  uppercase  bg-gray-700 text-gray-400">
+                <tr>
+                    <th scope="col" class="py-3 px-6">
+                        Tool name
+                    </th>
+                    <th scope="col" class="py-3 px-6">
+                        Added at
+                    </th>
+                    <th scope="col" class="py-3 px-6">
+                        Price
+                    </th>
+                    {% if request.user == profile_user %}
+                        <th scope="col" class="py-3 px-6">
+                            Edit
+                        </th>
+                    {% endif %}
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for tool in tools %}
+                    <tr class=" border-b bg-gray-800 border-gray-700 ">
+                        <th scope="row" class="py-4 px-6 font-medium whitespace-nowrap text-white">
+                            {{ tool.name }}
+                        </th>
+                        <td class="py-4 px-6">
+                            {{ tool.added_at.date }}
+                        </td>
+                        <td class="py-4 px-6">
+                            {{ tool.price }}$
+                        </td>
+                        {% if request.user == profile_user %}
+                            <td scope="col" class="py-3 px-6 text-blue-500">
+                                <button>Edit</button>
+                            </td>
+                        {% endif %}
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        {% if request.user == profile_user %}
+                    <h2 class="text-2xl mt-5 mb-2">Rental history :</h2>
+
+            <div class="overflow-x-auto relative shadow-md rounded-lg ">
+            <table class="w-full text-sm text-left  text-gray-400 ">
+                <thead class="text-xs  uppercase  bg-gray-700 text-gray-400">
+                <tr>
+                    <th scope="col" class="py-3 px-6">
+                        Tool name
+                    </th>
+                    <th scope="col" class="py-3 px-6">
+                       Start Date
+                    </th>
+                    <th scope="col" class="py-3 px-6">
+                        End date
+                    </th>
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for rental in historyRental %}
+                    <tr class=" border-b bg-gray-800 border-gray-700 ">
+                        <th scope="row" class="py-4 px-6 font-medium whitespace-nowrap text-white">
+                            {{ rental.tool.name }}
+                        </th>
+                        <td class="py-4 px-6">
+                            {{rental.start_date}}
+                        </td>
+                        <td class="py-4 px-6">
+                            {{ rental.end_date }}
+                        </td>
+                    <td>
+                        {% if rental.is_active %}
+                            <span class="text-green-500">Active</span>
+                        {% else %}
+                             <span class="text-red-700">Finished</span>
+                        {% endif %}
+                    </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+
+
+    </div>
+{% endblock %}

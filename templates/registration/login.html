@@ -1,18 +1,19 @@
 {% extends 'rental/base.html' %} {% block title %}Login{% endblock %}
  {% block content %}
      <h1 class="text-center text-3xl my-10 text-white">Log in </h1>
-<form method="post" class="border rounded p-2   md:m-auto m-auto max-w-[600px] ">
+<form method="post" class="shadow-md bg-gray-700 rounded p-4   md:m-auto m-auto max-w-[600px] ">
   {% csrf_token %}
     <div class="mb-6">
             <label for="{{ form.username.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                 Username : </label>
             {{ form.username }}
-            {{ form.username.errors }}{{ form.password.errors }}
+            {{ form.errors }}
         </div>
         <div class="mb-6">
             <label for="{{ form.password.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                 Password :</label>
             {{ form.password }}
+
         </div>
     <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
