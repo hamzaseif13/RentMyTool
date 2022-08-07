@@ -48,6 +48,8 @@ def sign_up(request):
 def tool(request, pk):
     try:
         tool = Tool.objects.get(pk=pk)
+        tool_history = RentalDetails.objects.filter(tool=tool)
+
         if request.method == "POST":
             form = RentForm(request.POST)
             days = int(request.POST['rental_days'])
@@ -57,18 +59,57 @@ def tool(request, pk):
                 return redirect('/')
         else:
             form = RentForm()
-        return render(request, 'rental/tool.html', {'tool': tool, 'form': form})
     except Tool.DoesNotExist:
         raise Http404
+    return render(request, 'rental/tool.html', {'tool': tool, 'form': form, 'tool_history': tool_history})
 
 
 def profile(request, username):
     try:
         user = CustomUser.objects.get(username=username)
         tools = Tool.objects.filter(owner=user)
-        historyRental=[]
+        historyRental = []
         if request.user == user:
             historyRental = RentalDetails.objects.filter(renter=user)
     except CustomUser.DoesNotExist:
         raise Http404
-    return render(request, 'rental/profile.html', {'historyRental': historyRental,'profile_user':user,'tools':tools})
+    return render(request, 'rental/profile.html',
+                  {'historyRental': historyRental[::-1], 'profile_user': user, 'tools': tools})
+
+
+def update_tool(request, pk):
+    try:
+        tool = Tool.objects.get(pk=pk)
+        if not request.user == tool.owner:
+            return redirect('/')
+        if request.method == "POST":
+            form = ToolForm(request.POST, instance=tool)
+            # prevent tool from being edited if its currently rented
+            if not tool.is_available:
+                return redirect(F'/tool/{tool.id}?updated=false')
+            if form.is_valid():
+                form.save()
+                return redirect(F'/tool/{tool.id}?updated=true')
+        else:
+            form = ToolForm(instance=tool)
+    except Tool.DoesNotExist:
+        raise Http404
+    return render(request, "rental/update_tool.html", {"form": form, 'tool_id': tool.id})
+
+
+def delete_tool(request, pk):
+    tool = Tool.objects.get(pk=pk)
+    deleted = 0
+    if tool.is_available:
+        deleted = tool.delete()[0]
+    return redirect(f'/profile/{request.user.username}?deleted={deleted}')
+
+
+def cancel_rental(request, pk):
+    try:
+        rental = RentalDetails.objects.get(pk=pk)
+        rental.canceled = True
+        rental.save()
+        return redirect(f'/profile/{request.user.username}')
+    except RentalDetails.DoesNotExist:
+        return Http404

@@ -77,6 +77,7 @@ class CustomLoginForm(AuthenticationForm):
         )
 
 
+
 class RentForm(forms.Form):
     rental_days = forms.IntegerField(max_value=14,min_value=1,widget=forms.NumberInput(attrs={'class':'rounded py-2 text-center font-bold ml-2','value':1}))
 

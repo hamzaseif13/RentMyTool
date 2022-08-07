@@ -1,49 +1,59 @@
 {% extends 'rental/base.html' %}
 
 {% block content %}
-    <div class="mx-4 lg:mx-[15rem] md:mx-[5rem] sm:mx-[5rem] mt-10 text-white">
+    {% if request.GET.deleted == '1' %}
+        <h1 class="text-center bg-green-500">Tool deleted successfully</h1>
+    {% elif request.GET.deleted == '0' %}
+        <h1 class="text-center bg-red-500">Tool wasn't deleted successfully,you can't delete a tool while its
+            rented</h1>
+    {% endif %}
+    <div class="mx-2 lg:mx-[15rem] md:mx-[5rem] sm:mx-[5rem] mt-10 text-white">
         <h1 class=" text-3xl">{{ profile_user.full_name }}</h1>
-        <h2 class="text-2xl mt-5 mb-2">Tools :</h2>
-
+        <h5 class="text-gray-500 mt-2">Joined at {{ profile_user.date_joined.date }}</h5>
+        <h2 class="text-2xl mt-5 mb-2">Your Tools :</h2>
+        <h5 class="text-gray-500">Click on a tool to see more details </h5>
 
         <div class="overflow-x-auto relative shadow-md rounded-lg ">
             <table class="w-full text-sm text-left  text-gray-400 ">
                 <thead class="text-xs  uppercase  bg-gray-700 text-gray-400">
                 <tr>
-                    <th scope="col" class="py-3 px-6">
+                    <th scope="col" class="py-3 px-2">
                         Tool name
                     </th>
-                    <th scope="col" class="py-3 px-6">
+                    <th scope="col" class="py-3 px-2">
                         Added at
                     </th>
-                    <th scope="col" class="py-3 px-6">
+                    <th scope="col" class="py-3 px-2">
                         Price
                     </th>
                     {% if request.user == profile_user %}
-                        <th scope="col" class="py-3 px-6">
+                        <th scope="col" class="py-3 px-2">
                             Edit
                         </th>
                     {% endif %}
+
 
                 </tr>
                 </thead>
                 <tbody>
                 {% for tool in tools %}
                     <tr class=" border-b bg-gray-800 border-gray-700 ">
-                        <th scope="row" class="py-4 px-6 font-medium whitespace-nowrap text-white">
-                            {{ tool.name }}
+                        <th scope="row"
+                            class="py-4 px-2 font-medium whitespace-nowrap  text-blue-500 hover:text-blue-400">
+                            <a href="{% url 'tool' tool.id %}">{{ tool.name }}</a>
                         </th>
-                        <td class="py-4 px-6">
+                        <td class="py-4 px-2">
                             {{ tool.added_at.date }}
                         </td>
-                        <td class="py-4 px-6">
+                        <td class="py-4 px-2">
                             {{ tool.price }}$
                         </td>
                         {% if request.user == profile_user %}
-                            <td scope="col" class="py-3 px-6 text-blue-500">
-                                <button>Edit</button>
+                            <td class="py-3 px-2 text-blue-500">
+                                <a href="/tool/{{ tool.id }}/update_tool">Edit</a>
                             </td>
                         {% endif %}
+
 
                     </tr>
                 {% endfor %}
@@ -53,54 +63,76 @@
 
         <br>
         {% if request.user == profile_user %}
-                    <h2 class="text-2xl mt-5 mb-2">Rental history :</h2>
-
+            <h2 class="text-2xl mt-5 mb-2">Your Rental history :</h2>
             <div class="overflow-x-auto relative shadow-md rounded-lg ">
-            <table class="w-full text-sm text-left  text-gray-400 ">
-                <thead class="text-xs  uppercase  bg-gray-700 text-gray-400">
-                <tr>
-                    <th scope="col" class="py-3 px-6">
-                        Tool name
-                    </th>
-                    <th scope="col" class="py-3 px-6">
-                       Start Date
-                    </th>
-                    <th scope="col" class="py-3 px-6">
-                        End date
-                    </th>
-                    <th>
-                        Status
-                    </th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {% for rental in historyRental %}
-                    <tr class=" border-b bg-gray-800 border-gray-700 ">
-                        <th scope="row" class="py-4 px-6 font-medium whitespace-nowrap text-white">
-                            {{ rental.tool.name }}
+                <table class="w-full text-sm text-left  text-gray-400 ">
+                    <thead class="text-xs  uppercase  bg-gray-700 text-gray-400">
+                    <tr>
+                        <th scope="col" class="py-3 px-2">
+                            Tool name
                         </th>
-                        <td class="py-4 px-6">
-                            {{rental.start_date}}
-                        </td>
-                        <td class="py-4 px-6">
-                            {{ rental.end_date }}
-                        </td>
-                    <td>
-                        {% if rental.is_active %}
-                            <span class="text-green-500">Active</span>
-                        {% else %}
-                             <span class="text-red-700">Finished</span>
-                        {% endif %}
-                    </td>
-
+                        <th scope="col" class="py-3 px-2">
+                            Start Date
+                        </th>
+                        <th scope="col" class="py-3 px-2">
+                            End date
+                        </th>
+                        <th scope="col" class="py-3 px-2">
+                            Total price
+                        </th>
+                        <th scope="col" class="py-3 px-2">
+                            Status
+                        </th>
+                        <th scope="col" class="py-3 px-2">
+                            Cancel
+                        </th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
+                    </thead>
+                    <tbody>
+                    {% for rental in historyRental %}
+                        <tr class=" border-b bg-gray-800 border-gray-700 ">
+                            <th scope="row"
+                                class="py-4 px-2 font-medium whitespace-nowrap  text-blue-500 hover:text-blue-400">
+                                {% if rental.tool %}
+                                    <a href="{% url 'tool' rental.tool.id %}">{{ rental.tool.name }}</a>
+                                {% else %}
+                                    <span class="text-gray-500">deleted tool</span>
+                                {% endif %}
 
+                            </th>
+                            <td class="py-4 px-2">
+                                {{ rental.start_date }}
+                            </td>
+                            <td class="py-4 px-2">
+                                {{ rental.end_date }}
+                            </td>
+                            <td class="py-4 px-2">
+                                {{ rental.total_price }}$
+                            </td>
+                            <td class="py-4 px-2">
+                                {% if rental.is_active %}
+                                    <span class="text-green-500">Active</span>
+
+                                {% elif rental.canceled %}
+                                    <span class="text-red-700">Canceled</span>
+                                {% else %}
+                                    <span class="text-gray-500">Finished</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 px-2">
+                                {% if rental.is_active %}
+                                <a href="{% url 'cance_rental' rental.id %}"
+                                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center ">Cancel
+                                </a>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
 
 
     </div>

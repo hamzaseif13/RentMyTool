@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 
+
 class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
@@ -23,45 +24,41 @@ class Tool(models.Model):
     image_url = models.URLField(blank=True, null=True)
     price = models.IntegerField()
 
-    def rent(self, user, number_of_days):
-        if user == self.owner:
+    def rent(self, user, number_of_days)->bool:
+        """Rent current tool, return true if the rent process is successful otherwise false"""
+        if user == self.owner or not self.is_available:
             return False
 
-        if self.is_available:
-            todayDate = datetime.datetime.today().date()
-            rental_details = RentalDetails(tool=self, renter=user, start_date=todayDate,
-                                           end_date=todayDate + datetime.timedelta(days=number_of_days+1),total_price=self.price*number_of_days)
-            rental_details.save()
-            return True
-        return False
+        todayDate = datetime.datetime.today().date()
+        rental_details = RentalDetails(tool=self, renter=user, start_date=todayDate,
+                                       end_date=todayDate + datetime.timedelta(days=number_of_days + 1),
+                                       total_price=self.price * number_of_days)
+        rental_details.save()
+        return True
 
     def __str__(self):
         return self.name
 
     @property
     def is_available(self):
+        """check if is tool is rented """
         history = RentalDetails.objects.filter(tool=self)
-        for his in history:
-            if his.is_active:
-                return False
-        return True
+        return not any(s.is_active for s in history)
+
 
 
 class RentalDetails(models.Model):
-    rental_choices = (
-        ("D", "Done"),  # The rental time is finished
-        ("C", "Canceled"),  # The renter canceled
-        ("A", "Active")  # The tool is still rented
-    )
     renter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     tool = models.ForeignKey(Tool, on_delete=models.SET_NULL, null=True)
     start_date = models.DateTimeField(null=True, auto_now_add=True)
     end_date = models.DateTimeField(null=True)
     total_price = models.IntegerField()
     canceled = models.BooleanField(default=False)
+
     @property
     def is_active(self):
-        if timezone.now() >= self.end_date:
+        """check if tool is still rented , return false if either canceled ir finished"""
+        if self.canceled or timezone.now() >= self.end_date:
             return False
         return True
 
