@@ -61,7 +61,7 @@ def tool(request, pk):
             form = RentForm()
     except Tool.DoesNotExist:
         raise Http404
-    return render(request, 'rental/tool.html', {'tool': tool, 'form': form, 'tool_history': tool_history})
+    return render(request, 'rental/tool.html', {'tool': tool, 'form': form, 'tool_history': tool_history[::-1]})
 
 
 def profile(request, username):

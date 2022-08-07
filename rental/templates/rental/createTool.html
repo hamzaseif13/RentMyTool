@@ -1,5 +1,7 @@
 {% extends 'rental/base.html' %}
+{% block title %}Create new Tool{% endblock %}
 {% block content %}
+
     <h1 class="text-center text-3xl my-10 text-white">Create new tool</h1>
     <form method="post" class="shadow-md bg-gray-700 rounded p-4 mx-2  md:m-auto max-w-[600px] ">
         {% csrf_token %}

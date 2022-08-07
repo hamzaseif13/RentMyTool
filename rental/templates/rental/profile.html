@@ -1,5 +1,5 @@
 {% extends 'rental/base.html' %}
-
+{% block title %}Profile | {{ user.first_name }}{% endblock %}
 {% block content %}
     {% if request.GET.deleted == '1' %}
         <h1 class="text-center bg-green-500">Tool deleted successfully</h1>
@@ -10,9 +10,8 @@
     <div class="mx-2 lg:mx-[15rem] md:mx-[5rem] sm:mx-[5rem] mt-10 text-white">
         <h1 class=" text-3xl">{{ profile_user.full_name }}</h1>
         <h5 class="text-gray-500 mt-2">Joined at {{ profile_user.date_joined.date }}</h5>
-        <h2 class="text-2xl mt-5 mb-2">Your Tools :</h2>
+        <h2 class="text-2xl mt-5 mb-2">{{ profile_user.first_name }}'s Tools :</h2>
         <h5 class="text-gray-500">Click on a tool to see more details </h5>
-
         <div class="overflow-x-auto relative shadow-md rounded-lg ">
             <table class="w-full text-sm text-left  text-gray-400 ">
                 <thead class="text-xs  uppercase  bg-gray-700 text-gray-400">
@@ -121,9 +120,9 @@
                             </td>
                             <td class="py-4 px-2">
                                 {% if rental.is_active %}
-                                <a href="{% url 'cance_rental' rental.id %}"
-                                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center ">Cancel
-                                </a>
+                                    <a href="{% url 'cance_rental' rental.id %}"
+                                       class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center ">Cancel
+                                    </a>
                                 {% endif %}
                             </td>
 
@@ -133,7 +132,5 @@
                 </table>
             </div>
         {% endif %}
-
-
     </div>
 {% endblock %}
