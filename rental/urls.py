@@ -1,5 +1,8 @@
+from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView
 from django.urls import path
+
+from django.conf import settings
 from .views import create_tool, sign_up, home, tool, profile,update_tool,delete_tool,cancel_rental
 from .forms import CustomLoginForm
 
@@ -17,4 +20,4 @@ urlpatterns = [
     path('tool/delete/<int:pk>/',delete_tool,name='delete_tool'),
     path('rental/cancel/<int:pk>/',cancel_rental,name='cancel_rental')
 
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
