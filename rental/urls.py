@@ -20,4 +20,4 @@ urlpatterns = [
     path('tool/delete/<int:pk>/',delete_tool,name='delete_tool'),
     path('rental/cancel/<int:pk>/',cancel_rental,name='cancel_rental')
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
