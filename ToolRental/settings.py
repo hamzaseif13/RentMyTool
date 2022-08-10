@@ -82,9 +82,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rentmytool',
-        'USER': 'hamza',
-        'PASSWORD': '1253',
-        'HOST': 'localhost',
+        'USER': 'hamzaseif11',
+        'PASSWORD': 'Omar@159',
+        'HOST': 'jadwali.mysql.database.azure.com',
         'PORT': '3306',
     }
 }
