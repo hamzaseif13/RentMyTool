@@ -1,0 +1,52 @@
+{% extends 'rental/base.html' %}
+{% block content %}
+    <div class="mt-5 mx-2 lg:mx-[15rem] md:mx-[5rem] sm:mx-[5rem] mt-10">
+        <h1 class=" text-white text-xl ">Check out latest tools</h1>
+        <div class="my-2 text-white space-x-5">
+            <a href="{% url 'tools' %}?view=available" class="text-blue-600">Available Tools</a>
+            <a href="{% url 'tools' %}">All tools</a>
+        </div>
+
+        <div class="flex flex-wrap justify-center items-center ">
+            {% for tool in tools %}
+                <div class="max-w-[300px] h-[450px] border-white rounded-lg shadow-md bg-gray-700 m-2">
+                    <a href="#">
+                        <img class="p-5 rounded w-[300px] h-[300px] object-cover"
+                             src="{{ tool.image_url }}"
+                             alt="product image">
+                    </a>
+                    <div class="px-5 pb-5">
+                        <a href="{% url 'tool' tool.id %}">
+                            <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white hover:text-blue-500">
+                                {{ tool.name }}</h5>
+                        </a>
+                        <a href="{% url 'profile' tool.owner.username %}">
+                            <h5 class=" text-gray-500  hover:text-blue-500">
+                                {{ tool.owner.full_name }}</h5>
+                        </a>
+                        <div class="flex items-center mt-2.5 mb-5 space-x-2">
+                            <span class="text-yellow-500 font-extrabold">&#9733;</span>
+                            <span class="text-yellow-500 font-extrabold">&#9733;</span>
+                            <span class="text-yellow-500 font-extrabold">&#9733;</span>
+                            <span class="text-yellow-500 font-extrabold">&#9733;</span>
+                            <span class="text-yellow-500 font-extrabold">&#9733;</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">5.0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-3xl  text-gray-900 dark:text-white">{{ tool.price }}$ <span
+                                    class="text-sm text-gray-500">/Day</span></span>
+                            {% if tool.is_available %}
+                                <a href="{% url 'tool' tool.id %}"
+                                   class="text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5
+                               text-center  hover:bg-blue-800 ">Rent</a>
+                            {% else %}
+                                <h1 class="text-red-600">not available</h1>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
