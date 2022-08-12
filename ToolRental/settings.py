@@ -13,6 +13,10 @@ import os.path
 from pathlib import Path
 import django_heroku
 import dj_database_url
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,10 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5&7y6wz49$z%4=%79$hga@e#z6boblw-rjwpd+m)u*8a0h*99h'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
+DEBUG = bool(env('DEBUG'))
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS=['https://*.ngrok.io/']
@@ -81,10 +86,10 @@ WSGI_APPLICATION = 'ToolRental.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rentmytool',
-        'USER': 'hamzaseif11',
-        'PASSWORD': 'Omar@159',
-        'HOST': 'jadwali.mysql.database.azure.com',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD':env('DATABASE_PASS'),
+        'HOST': env('DATABASE_HOST'),
         'PORT': '3306',
     }
 }
