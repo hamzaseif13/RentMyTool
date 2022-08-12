@@ -1,6 +1,3 @@
-import datetime
-import time
-12
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -113,3 +110,11 @@ def cancel_rental(request, pk):
         return redirect(f'/profile/{request.user.username}')
     except RentalDetails.DoesNotExist:
         return Http404
+
+def get_tools(request):
+    tools=[]
+    if request.GET.get("view",False):
+        tools = [s for s in Tool.objects.all() if s.is_available]
+    else :
+        tools = Tool.objects.all()
+    return render(request,'rental/tools.html',{'tools':tools})

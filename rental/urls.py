@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import path
 
 from django.conf import settings
-from .views import create_tool, sign_up, home, tool, profile,update_tool,delete_tool,cancel_rental
+from .views import create_tool, sign_up, home, tool, profile,update_tool,delete_tool,cancel_rental,get_tools
 from .forms import CustomLoginForm
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path('profile/<str:username>/', profile, name='profile'),
     path('tool/<int:pk>/update_tool/',update_tool,name='update_tool'),
     path('tool/delete/<int:pk>/',delete_tool,name='delete_tool'),
-    path('rental/cancel/<int:pk>/',cancel_rental,name='cancel_rental')
+    path('rental/cancel/<int:pk>/',cancel_rental,name='cancel_rental'),
+    path('tools',get_tools,name='tools')
 
 ]
