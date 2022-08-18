@@ -22,5 +22,7 @@ class RentTest(TestCase):
 
     def test_rent_tool(self):
         self.assertTrue(self.tool.rent(self.secondUser,5))
+    def test_test(self):
+        self.assertEqual(5,5)
 
 
